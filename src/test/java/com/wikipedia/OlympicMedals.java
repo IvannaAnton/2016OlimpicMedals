@@ -17,7 +17,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -110,22 +109,18 @@ public class OlympicMedals {
 		data = driver.findElements(
 				By.xpath("//table[@class='wikitable sortable plainrowheaders jquery-tablesorter']/tbody/tr"));
 		String MostGold = mostGold(data);
-		System.out.println(MostGold);
 		assertEquals(MostGold, "United States");
 		// 3. Write a method that returns the name of the country with the most numbe of
 		// silver medals.
 		String MostSilver = mostSilver(data);
-		System.out.println(MostSilver);
 		assertEquals(MostSilver, "United States");
 		// 4. Write a method that returns the name of the country with the most number
 		// of bronze medals.
 		String MostBronze = mostBronz(data);
-		System.out.println(MostBronze);
 		assertEquals(MostBronze, "United States");
 		// 5. Write a method that returns the name of the country with the most number
 		// of medals.
 		String TotalMedals = TotalMedals(data);
-		System.out.println(TotalMedals);
 		assertEquals(TotalMedals, "United States");
 	}
 
@@ -133,15 +128,12 @@ public class OlympicMedals {
 	public void TestCase3() {
 		// 1. Go to website
 		driver.get(url);
-		// 2. Write a method that returns a list of countries whose silver medal count i
-		// equal to 18.
-		
-		data = driver.findElements(
-				By.xpath("//table[@class='wikitable sortable plainrowheaders jquery-tablesorter']/tbody/tr"));
-		
-		System.out.println(silverCountries(data));
+		data = driver.findElements(By.xpath("//table[@class='wikitable sortable plainrowheaders jquery-tablesorter']/tbody/tr"));
+		// 2. Write a method that returns a list of countries whose silver medal count is equal to 18.
+		silverCountries=CountriesSilverMedals(data);
 		// 3. Write TestNG test for your method.
 		List<String> expected=Arrays.asList(" China (CHN)"," France (FRA)");
+		
 		assertEquals(silverCountries, expected);
 
 		}
@@ -150,6 +142,7 @@ public class OlympicMedals {
 	public void TestCase4() {
 		// 1. Go to website
 		driver.get(url);
+		data = driver.findElements(By.xpath("//table[@class='wikitable sortable plainrowheaders jquery-tablesorter']/tbody/tr"));
 		// 2. Write a method that takes country name and returns the row and column
 		// number. You decide the datatype of the return.
 		String expected = "Name of the country is :JapanJapan row 7 column 1";
@@ -162,8 +155,9 @@ public class OlympicMedals {
 	public void TestCase5() {
 		// 1. Go to website
 				driver.get(url);
+				data = driver.findElements(By.xpath("//table[@class='wikitable sortable plainrowheaders jquery-tablesorter']/tbody/tr"));
 		//2. Write a method that returns a list of two countries whose sum of bronze medals is 18.	
-				bronzeCountries=sum18(18);
+				bronzeCountries=SumOfBronz18(data);
 				List<String> expected=Arrays.asList(" Australia (AUS)"," Italy (ITA)");
 				assertEquals(bronzeCountries, expected);
 				
@@ -290,8 +284,9 @@ public class OlympicMedals {
 		return result;
 	}
 
-	public List<String> silverCountries(List<WebElement> li) {
-		for (int i = 0; i < li.size() - 1; i++) {
+	public List<String> CountriesSilverMedals(List<WebElement> list) {
+		
+		for (int i = 0; i < list.size() - 1; i++) {
 			String xpath = "//table[@class='wikitable sortable plainrowheaders jquery-tablesorter']/tbody/tr[" + (i + 1)
 					+ "]/td[3]";
 			String medal = driver.findElement(By.xpath(xpath)).getText();
@@ -332,7 +327,7 @@ public class OlympicMedals {
 		return "Name of the country is :" + name + " row " + row + " column " + column;
 	}
 
-	public List<String> sum18(int sum) {
+	public List<String> SumOfBronz18(List<WebElement> list) {
 
 		List<String> bronzeCountries = new ArrayList<String>();
 		for (int i = 0; i < data.size() - 1; i++) {
@@ -344,7 +339,7 @@ public class OlympicMedals {
 						+ (j + 1) + "]/td[4]";
 				int tdData = Integer.parseInt((driver.findElement(By.xpath(xpath)).getText()));
 				int tdData1 = Integer.parseInt((driver.findElement(By.xpath(xpath1)).getText()));
-				if ((tdData + tdData1) == sum) {
+				if ((tdData + tdData1) == 18) {
 					String country = driver.findElement(
 							By.xpath("//table[@class='wikitable sortable plainrowheaders jquery-tablesorter']/tbody/tr["
 									+ (i + 1) + "]/th"))
